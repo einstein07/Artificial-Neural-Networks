@@ -9,19 +9,23 @@
 
 #ifndef ANN_H
 #define ANN_H
+#include <iostream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 #include <vector>
 namespace MKHSIN035{
   class neuron{
   private:
       int output;
-      int prev_neurons;
+      int n_prev_neurons;
+      double theta;
       std::vector<double> weights;
   public:
       neuron();
-      neuron(int prev_neurons);
-      int activation_fn(int inputs);
+      neuron(int n_prev_neurons, double theta);
+      int activation_fn(const double inputs[]);
       int get_output();
-      
+      bool learn(double input[], double t);
   };  
 };
 
