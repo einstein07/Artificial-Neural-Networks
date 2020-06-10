@@ -29,22 +29,23 @@ namespace MKHSIN035{
       neuron();
       neuron(int prev_neurons, double weights[]);
       int activation_fn(const double inputs[]);
-      int get_output();
+      std::vector<double> get_weights(); //return weights
   }; 
   //----------------------------------------------------------------------------
   //Layer class interface
   //----------------------------------------------------------------------------
   class layer{
   private:
-      int neurons;//Number of neurons in this layer
+      int neurons_n;//Number of neurons in this layer
       int prev_neurons;//Number of previous neurons
-      vector<neuron> neurons;//All neurons in this layer
-      vector<int> outputs;//outputs from all neurons in this layer
+      std::vector<neuron> neurons;//All neurons in this layer
+      std::vector<int> outputs;//outputs from all neurons in this layer
   public:
       layer();
       layer(int prev_neurons, int neurons);
       void learn(double input[], double t);//learning fn
       std::vector<int> activate(double inputs[]);
+      std::vector<double> get_weights(int i);
   };
 };
 
