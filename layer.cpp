@@ -14,15 +14,23 @@
 //Default constructor
 MKHSIN035::layer::layer():prev_neurons(0){}
 //Constructor
-MKHSIN035::layer::layer(int prev_neurons, int neurons):prev_neurons(prev_neurons+1), neurons(neurons){
+MKHSIN035::layer::layer(int prev_neurons, int neurons):prev_neurons(prev_neurons+1), neurons_n(neurons){
     double rand_w[this->prev_neurons];
     srand (time(NULL));
-    for (int i = 0; i < neurons; i++){ 
+    for (int i = 0; i < neurons_n; i++){ 
         for(int j = 0; j < this->prev_neurons; j++){
             rand_w[j]= ((double) rand() / (RAND_MAX));
         }
         neuron n(this->prev_neurons, rand_w);
+        neurons.push_back(n);
     }
+}
+std::vector<int> MKHSIN035::layer::activate(double inputs[]){
+    
+    for(int i = 0; i < neurons_n; i++){
+        outputs.push_back(neurons[i].activation_fn(inputs[]));
+    }
+    return this->outputs;
 }
 void MKHSIN035::layer::learn(double input[], double t){
     int y = activation_fn(input);
@@ -30,7 +38,7 @@ void MKHSIN035::layer::learn(double input[], double t){
     while(y != t){
         for (int i = 0; i < this->n_prev_neurons; i++){
                         
-            std::cout<<"It "<<(i+1)<<" Weight: "<<weights[i]<<" ";
+            //std::cout<<"It "<<(i+1)<<" Weight: "<<weights[i]<<" ";
             this->weights[i] = weights[i] + (t-y) * input[i];
 
         }
