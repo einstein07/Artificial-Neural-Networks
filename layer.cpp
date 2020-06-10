@@ -57,3 +57,4 @@ void MKHSIN035::layer::learn(double input[], double t){
     std::cout<<weights[0]<<" "<<weights[1]<<std::endl;
     //return true;
 }
+std::vector<double> get_weights(int i){return neurons[i].get_weights();}
