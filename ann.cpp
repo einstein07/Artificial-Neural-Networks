@@ -29,7 +29,7 @@ int MKHSIN035::neuron::activation_fn(const double inputs[]){
       
 int MKHSIN035::neuron::get_output(){return this->output;}
       
-bool MKHSIN035::neuron::learn(double input[], double t){
+void MKHSIN035::layer::learn(double input[], double t){
     int y = activation_fn(input);
             
     while(y != t){
@@ -43,7 +43,7 @@ bool MKHSIN035::neuron::learn(double input[], double t){
         std::cout<<std::endl;
     }
     std::cout<<weights[0]<<" "<<weights[1]<<std::endl;
-    return true;
+    //return true;
 }
 
 
