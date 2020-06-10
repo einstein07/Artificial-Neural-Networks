@@ -25,10 +25,19 @@ MKHSIN035::layer::layer(int prev_neurons, int neurons):prev_neurons(prev_neurons
         neurons.push_back(n);
     }
 }
-std::vector<int> MKHSIN035::layer::activate(double inputs[]){
-    
+std::vector<int> MKHSIN035::layer::activate(vector<int> inputs){
+    std::vector<int> values;
+    if(neurons[0].get_weights().size() != inputs.size()){
+        values.reserve(inputs.size()+1);
+        values[0] = 1;
+        for(int i = 1; i <= inputs.size(); i++){
+            values[i] = inputs[i];
+        }
+    }else{
+        values = inputs;
+    }
     for(int i = 0; i < neurons_n; i++){
-        outputs.push_back(neurons[i].activation_fn(inputs[]));
+        outputs.push_back(neurons[i].activation_fn(values));
     }
     return this->outputs;
 }
