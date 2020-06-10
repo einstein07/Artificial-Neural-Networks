@@ -25,8 +25,16 @@ namespace MKHSIN035{
       neuron(int n_prev_neurons, double theta);
       int activation_fn(const double inputs[]);
       int get_output();
-      bool learn(double input[], double t);
-  };  
+  }; 
+  class layer{
+  private:
+      vector<neuron> neurons;//All neurons in this layer
+      vector<int> outputs;//outputs from all neurons in this layer
+  public:
+            
+      void learn(double input[], double t);//learning fn
+
+  };
 };
 
 
