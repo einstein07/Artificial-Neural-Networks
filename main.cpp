@@ -14,10 +14,17 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    double x[] = {0.1,-9};
-    double t = 0; 
-    MKHSIN035::neuron n(2, 0.5);
-    if(n.learn(x,t))std::cout<<"Done learning: "<<n.get_output()<<endl;
+    std::vector<int> x;
+    x.push_back(0);
+    x.push_back(1);
+    double t = 1; 
+    MKHSIN035::layer n(2, 2);
+    n.learn(1, x, 1);
+    std::vector<double> weights = n.get_weights(1);
+       
+    std::cout<<weights[0]<<" "<<weights[1]<<" "<<weights[2]<<std::endl;
+
+    //if(n.learn(x,t))std::cout<<"Done learning: "<<n.get_output()<<endl;
     
     return 0;
 }
