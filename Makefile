@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-std=c++11
-SOURCES=main.cpp ann.cpp
+SOURCES=main.cpp layer.cpp neuron.cpp
 DEPS=ann.h
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=perceptron
