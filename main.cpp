@@ -14,59 +14,77 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
+    //Training examples. 
     vector < vector<int> > data =   {{0, 0},
                                     {0, 1},
                                     {1, 0},
                                     {1, 1}};
+    //Target output
     vector < vector<int> > label =  {{0, 1, 1, 1},//OR gate
                                     {1, 1, 1, 0}, //NAND gate
                                     {0, 0, 0, 1}};//AND gate
-    int n_neurons = 3;
+    cout<<"Learning..."<<endl;
+    //--------------------------------------------------------------------------
+    //Input layer training
+    //--------------------------------------------------------------------------
+    int n_neurons = 2;
     int prev_neurons = 2;
-    MKHSIN035::layer l(prev_neurons, n_neurons);
-    for(int i = 0; i < l.get_n_neurons(); i++){
+    MKHSIN035::layer l1(prev_neurons, n_neurons);//input layer
+    for(int i = 0; i < l1.get_n_neurons(); i++){
         for(int j = 0; j < label[i].size(); j++){
-            l.learn(i, data[j], label[i][j]);
+            l1.learn(i, data[j], label[i][j]);
         }
+        vector<double> w = l1.get_weights(i);
+        //cout<<"MAIN: Gate: "<<(i+1)<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<endl;
     }
-//    n.learn(0, vc[0], t);
-//    std::vector<double> weights = n.get_weights(0);
-//       
-//    std::cout<<weights[0]<<" "<<weights[1]<<" "<<weights[2]<<std::endl;
-//        
-//    t = 0;
-//    std::vector<int> x1;
-//    //x1.push_back(0.5);
-//    x1.push_back(0);
-//    x1.push_back(1);
-//    n.learn(0, x1, t);
-//    weights = n.get_weights(0);
-//    std::cout<<weights[0]<<" "<<weights[1]<<" "<<weights[2]<<std::endl;
-//    
-//    std::vector<int> x2;
-//    //x2.push_back(0.5);
-//    x2.push_back(1);
-//    x2.push_back(0);
-//    n.learn(0, x2, t);
-//    weights = n.get_weights(0);
-//    std::cout<<weights[0]<<" "<<weights[1]<<" "<<weights[2]<<std::endl;
-//
-//    t = 1;
-//    std::vector<int> x3;
-//    //x3.push_back(0.5);
-//    x3.push_back(1);
-//    x3.push_back(1);
-//    n.learn(0, x3, t);
-//    weights = n.get_weights(0);
-//    std::cout<<weights[0]<<" "<<weights[1]<<" "<<weights[2]<<std::endl;
-//    //std::cout<<"Done learning"<<std::endl;
-//    
-//    //n.learn(0, x, 1);
-//    std::vector<int> tes;
-//    tes.push_back(0);
-//    tes.push_back(1);
-//    x1 = n.activate(tes);
-    std::cout<<"Done learning"<<endl;
+    //--------------------------------------------------------------------------
+    //Output layer: AND gate
+    //--------------------------------------------------------------------------
+    n_neurons = 1;
+    MKHSIN035::layer l2(prev_neurons, n_neurons); //output layer
+    for(int i = 0; i < l2.get_n_neurons(); i++){
+        for(int j = 0; j < label[i].size(); j++){
+            l2.learn(i, data[j], label[2][j]);
+        }
+        vector<double> w = l2.get_weights(i);
+        //cout<<"Output layer AND Gate: "<<(i+1)<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<endl;
+    }
+    cout<<"Done"<<endl;
+    //--------------------------------------------------------------------------
+    //GATE 1: OR gate
+    //GATE 2: NAND gate
+    //--------------------------------------------------------------------------
+    vector < vector<int> > l1_output; 
+    cout<<"Testing..."<<endl;
+    
+    for(int i = 0; i < data.size(); i++){
+        l1_output.push_back(l1.activate(data[i]));
+    }
+    
+    for(int i = 0; i < l1.get_n_neurons(); i++){
+        if(i == 0)
+            cout<<"OR Gate: ";
+        else
+            cout<<"NAND Gate: ";
+        cout<<"\nInput\t\tOutput"<<endl;
+                for(int j = 0; j < data.size(); j++){
+                    cout<<data[j][0]<<" "<<data[j][1]<<"\t\t"<<l1_output[j][i]<<endl;
+                }
+    }
+    //--------------------------------------------------------------------------
+    //Input of the AND is the output from the OR & NAND gates:
+    //--------------------------------------------------------------------------
+    vector < vector<int> > l2_output; 
+    for(int i = 0; i < data.size(); i++){
+        l2_output.push_back(l2.activate(l1_output[i]));
+    }
+    
+    for(int i = 0; i < l2.get_n_neurons(); i++){
+        cout<<"AND Gate: "<<"\nInput\t\tOutput"<<endl;
+                for(int j = 0; j < data.size(); j++){
+                    cout<<l1_output[j][0]<<" "<<l1_output[j][1]<<"\t\t"<<l2_output[j][i]<<endl;
+                }
+    }
     
     return 0;
 }
