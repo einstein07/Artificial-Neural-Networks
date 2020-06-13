@@ -14,7 +14,13 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
+    MKHSIN035::part_1();
+    return 0;
+}
 
+    
+void MKHSIN035::part_1(){
+    
     //--------------------------------------------------------------------------
     //PART 1
     //--------------------------------------------------------------------------
@@ -77,7 +83,6 @@ int main(int argc, char** argv) {
             l2.learn(i, data[j], label[2][j]);
         }
         vector<double> w = l2.get_weights(i);
-        //cout<<"Output layer AND Gate: "<<(i+1)<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<endl;
     }
     cout<<"Done"<<endl;
     //--------------------------------------------------------------------------
@@ -117,6 +122,6 @@ int main(int argc, char** argv) {
     }
     
     file.close();
-    return 0;
 }
+
 
