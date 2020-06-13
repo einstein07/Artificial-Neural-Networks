@@ -7,6 +7,7 @@
  */
 #include "ann.h"
 #include <cstdlib>
+#include <fstream>
 using namespace std;
 
 /*
@@ -14,6 +15,9 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
+    //--------------------------------------------------------------------------
+    //PART 1
+    //--------------------------------------------------------------------------
     //Training examples. 
     vector < vector<int> > data =   {{0, 0},
                                     {0, 1},
@@ -23,6 +27,32 @@ int main(int argc, char** argv) {
     vector < vector<int> > label =  {{0, 1, 1, 1},//OR gate
                                     {1, 1, 1, 0}, //NAND gate
                                     {0, 0, 0, 1}};//AND gate
+    //Create and open file for writing
+    ofstream file;
+    file.open("output.txt");
+    
+    file<<"--------------------------------------------------------------------------"<<endl;
+    file<<"Question 1"<<endl;
+    file<<"--------------------------------------------------------------------------"<<endl;  
+    file<<"Minimum number of perceptrons: "<<3<<endl;
+    file<<"Input layer: NAND gate & OR gate >>> Output layer: AND gate"<<endl;
+    
+    file<<"--------------------------------------------------------------------------"<<endl;
+    file<<"Question 2"<<endl;
+    file<<"--------------------------------------------------------------------------"<<endl;  
+    file<<"Training examples: "<<endl;
+    for(int i = 0; i < 3; i++){
+        if(i == 0)
+            file<<"OR gate training examples: \nInput\t\tTarget output"<<endl;
+        else if(i == 1)
+            file<<"NAND gate training examples: \nInput\t\tTarget output"<<endl;
+        else
+            file<<"AND gate training examples: \nInput\t\tTarget output"<<endl;
+        for(int j = 0; j < label[i].size(); j++){
+            file<<data[j][0]<<" "<<data[j][1]<<"\t\t"<<label[i][j]<<endl;
+        }
+    }
+    file<<"It took 12 training examples to correctly learn to solve the binary XOR problem."<<endl;
     cout<<"Learning..."<<endl;
     //--------------------------------------------------------------------------
     //Input layer training
@@ -86,6 +116,7 @@ int main(int argc, char** argv) {
                 }
     }
     
+    file.close();
     return 0;
 }
 
