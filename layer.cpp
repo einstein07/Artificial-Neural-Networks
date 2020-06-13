@@ -28,6 +28,7 @@ MKHSIN035::layer::layer(int prev_neurons_n, int neurons):prev_neurons(prev_neuro
     
 }
 std::vector<int> MKHSIN035::layer::activate(std::vector<int> inputs){
+    std::vector<int> output;
     std::vector<int> values;
     if(neurons[0].get_weights().size() != inputs.size()){
         values.push_back(1);
@@ -37,15 +38,15 @@ std::vector<int> MKHSIN035::layer::activate(std::vector<int> inputs){
     }else{
         values = inputs;
     }
-    //std::cout<<values[0]<<" "<<values[1]<<" "<<values[2]<<std::endl;
     for(int i = 0; i < neurons_n; i++){
-        outputs.push_back(neurons[i].activation_fn(values));
+        int y = neurons[i].activation_fn(values);
+        output.push_back(y);
     }
-    return this->outputs;
+    return output;
 }
-void MKHSIN035::layer::learn(int i, std::vector<int> inputs, double t){
+void MKHSIN035::layer::learn(int index, std::vector<int> inputs, double t){
     std::vector<int> values;
-    if(neurons[0].get_weights().size() != inputs.size()){
+    if(neurons[index].get_weights().size() != inputs.size()){
                 
         values.push_back(1);
         for(int i = 0; i <= inputs.size(); i++){
@@ -54,21 +55,20 @@ void MKHSIN035::layer::learn(int i, std::vector<int> inputs, double t){
     }else{
         values = inputs;
     }
-    std::vector<double> weights = neurons[i].get_weights();
-    int y = neurons[i].activation_fn(values);
+    std::vector<double> weights = neurons[index].get_weights();
+    int y = neurons[index].activation_fn(values);
                 
 
-
-    while(y != t){
-        //Bias term
+    //weights[0] = -1.5;
+    while(true){
+        if(y == t)
+            break;
+        
         for (int i = 0; i < this->prev_neurons; i++){
-            weights[i] = weights[i] + 0.001*(t-y) * values[i];
+            weights[i] += 0.009*(t-y) * values[i];
         }
-            
-        neurons[i].set_weights(weights);
-
-        y = neurons[i].activation_fn(values);
-        //std::cout<<std::endl;
+        neurons[index].set_weights(weights);
+        y = neurons[index].activation_fn(values);
     }
     //return true;
 }
