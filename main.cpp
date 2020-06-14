@@ -24,15 +24,32 @@ void MKHSIN035::part_1(){
     //--------------------------------------------------------------------------
     //PART 1
     //--------------------------------------------------------------------------
-    //Training examples. 
+    //Testing data. 
     vector < vector<int> > data =   {{0, 0},
                                     {0, 1},
                                     {1, 0},
                                     {1, 1}};
-    //Target output
-    vector < vector<int> > label =  {{0, 1, 1, 1},//OR gate
-                                    {1, 1, 1, 0}, //NAND gate
-                                    {0, 0, 0, 1}};//AND gate
+   
+    MKHSIN035::data OR_examples =   {
+                                            {{0, 0}, 0},
+                                            {{0, 1}, 1},
+                                            {{1, 0}, 1},
+                                            {{1, 1}, 1}     
+                                    };
+    
+    MKHSIN035::data NAND_examples = {
+                                            {{0, 0}, 1},
+                                            {{0, 1}, 1},
+                                            {{1, 0}, 1},
+                                            {{1, 1}, 0}
+                                    };
+    
+    MKHSIN035::data AND_examples =  {
+                                            {{0, 0}, 0},
+                                            {{0, 1}, 0},
+                                            {{1, 0}, 0},
+                                            {{1, 1}, 1}
+                                    };
     //Create and open file for writing
     ofstream file;
     file.open("output.txt");
@@ -47,18 +64,30 @@ void MKHSIN035::part_1(){
     file<<"Question 2"<<endl;
     file<<"--------------------------------------------------------------------------"<<endl;  
     file<<"Training examples: "<<endl;
-    for(int i = 0; i < 3; i++){
-        if(i == 0)
-            file<<"OR gate training examples: \nInput\t\tTarget output"<<endl;
-        else if(i == 1)
-            file<<"NAND gate training examples: \nInput\t\tTarget output"<<endl;
-        else
-            file<<"AND gate training examples: \nInput\t\tTarget output"<<endl;
-        for(int j = 0; j < label[i].size(); j++){
-            file<<data[j][0]<<" "<<data[j][1]<<"\t\t"<<label[i][j]<<endl;
+    
+    file<<"OR gate training examples: \nInput\t\tTarget output"<<endl;
+    for(auto entry: OR_examples){
+        for(int i:entry.first){
+            file<<i<<" ";
         }
+        file<<"\t\t"<<entry.second<<endl;
+    }   
+    file<<"NAND gate training examples: \nInput\t\tTarget output"<<endl;
+    for(auto entry: NAND_examples){
+        for(int i:entry.first){
+            file<<i<<" ";
+        }
+        file<<"\t\t"<<entry.second<<endl;
     }
+    file<<"AND gate training examples: \nInput\t\tTarget output"<<endl;
+    for(auto entry: AND_examples){
+        for(int i:entry.first){
+            file<<i<<" ";
+        }
+        file<<"\t\t"<<entry.second<<endl;
+    }     
     file<<"It took 12 training examples to correctly learn to solve the binary XOR problem."<<endl;
+    
     cout<<"Learning..."<<endl;
     //--------------------------------------------------------------------------
     //Input layer training
@@ -66,32 +95,26 @@ void MKHSIN035::part_1(){
     int n_neurons = 2;
     int prev_neurons = 2;
     MKHSIN035::layer l1(prev_neurons, n_neurons);//input layer
-    for(int i = 0; i < l1.get_n_neurons(); i++){
-        for(int j = 0; j < label[i].size(); j++){
-            l1.learn(i, data[j], label[i][j]);
-        }
-        vector<double> w = l1.get_weights(i);
-        //cout<<"MAIN: Gate: "<<(i+1)<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<endl;
-    }
+    l1.learn(0, OR_examples);
+    l1.learn(1, NAND_examples);
+   
     //--------------------------------------------------------------------------
     //Output layer: AND gate
     //--------------------------------------------------------------------------
     n_neurons = 1;
     MKHSIN035::layer l2(prev_neurons, n_neurons); //output layer
-    for(int i = 0; i < l2.get_n_neurons(); i++){
-        for(int j = 0; j < label[i].size(); j++){
-            l2.learn(i, data[j], label[2][j]);
-        }
-        vector<double> w = l2.get_weights(i);
-    }
+    l2.learn(0, AND_examples);
+
     cout<<"Done"<<endl;
     //--------------------------------------------------------------------------
     //GATE 1: OR gate
     //GATE 2: NAND gate
     //--------------------------------------------------------------------------
     vector < vector<int> > l1_output; 
-    cout<<"Testing..."<<endl;
-    
+    cout<<"Testing XOR gate..."<<endl;
+    cout<<"---------------------------------------------------------------------"<<endl;
+    cout<<"Input Layer"<<endl;
+    cout<<"---------------------------------------------------------------------"<<endl;
     for(int i = 0; i < data.size(); i++){
         l1_output.push_back(l1.activate(data[i]));
     }
@@ -113,6 +136,9 @@ void MKHSIN035::part_1(){
     for(int i = 0; i < data.size(); i++){
         l2_output.push_back(l2.activate(l1_output[i]));
     }
+    cout<<"---------------------------------------------------------------------"<<endl;
+    cout<<"Output Layer"<<endl;
+    cout<<"---------------------------------------------------------------------"<<endl;
     
     for(int i = 0; i < l2.get_n_neurons(); i++){
         cout<<"AND Gate: "<<"\nInput\t\tOutput"<<endl;

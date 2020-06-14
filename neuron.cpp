@@ -22,7 +22,7 @@ int MKHSIN035::neuron::activation_fn(const std::vector<int> inputs){
     double sum = 0.0;
     sum = weights[0];
     for(int i = 1; i < prev_neurons; i++){
-        sum += weights[i]*inputs[i];
+        sum += weights[i]*inputs[i-1];
     }
     this->output = (sum>0?1:0);
     return output;

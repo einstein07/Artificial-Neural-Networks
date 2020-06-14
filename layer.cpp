@@ -40,13 +40,13 @@ void MKHSIN035::layer::learn(int index, MKHSIN035::data examples){
     double done = false;
 
     int c = 0;
-    while(c != 8){
-        done = true;
+    while(c != 20){
+        
+        std::vector<double> prev_weights = neurons[index].get_weights();
+        std::vector<double> weights;
         for(auto entry:examples){
-            //if(enr)
-            //done = true;
-            //std::cout<<entry.second<<" "<<entry.first[0]<<" "<<entry.first[1]<<std::endl;
-            std::vector<double> weights = neurons[index].get_weights();
+            
+            weights = neurons[index].get_weights();
             std::vector<int> ex = entry.first;
             int t = entry.second;
             int y = neurons[index].activation_fn(ex);
@@ -57,18 +57,21 @@ void MKHSIN035::layer::learn(int index, MKHSIN035::data examples){
 
                 for (int i = 0; i < this->prev_neurons; i++){
                     if(i == 0)
-                        weights[i] += 0.009*(t-y);
+                        weights[i] += 0.001*(t-y);
                     else
-                        weights[i] += 0.009*(t-y) * ex[i-1];
+                        weights[i] += 0.001*(t-y) * ex[i-1];
                 }
                 neurons[index].set_weights(weights);
                 y = neurons[index].activation_fn(ex);
             }
-            
-            
-
-   
         }
+        for(int i = 0; i < prev_weights.size(); i++){
+            if(prev_weights[i] != weights[i])
+                done = false;
+            else
+                done = true;
+        }
+        
         c++;
         
     }   
