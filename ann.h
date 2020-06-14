@@ -51,7 +51,7 @@ namespace MKHSIN035{
   public:
       layer();
       layer(int prev_neurons_n, int neurons);
-      void learn(int i, std::vector<int> inputs, double t);//learning fn
+      void learn(int i, data examples);//learning fn
       std::vector<int> activate(std::vector<int> inputs);
       std::vector<double> get_weights(int i);
       int get_n_neurons();
