@@ -20,7 +20,8 @@ MKHSIN035::neuron::neuron(int prev_neurons, double weights[]):prev_neurons(prev_
 
 int MKHSIN035::neuron::activation_fn(const std::vector<int> inputs){
     double sum = 0.0;
-    for(int i = 0; i < prev_neurons; i++){
+    sum = weights[0];
+    for(int i = 1; i < prev_neurons; i++){
         sum += weights[i]*inputs[i];
     }
     this->output = (sum>0?1:0);
