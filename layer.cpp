@@ -29,48 +29,50 @@ MKHSIN035::layer::layer(int prev_neurons_n, int neurons):prev_neurons(prev_neuro
 }
 std::vector<int> MKHSIN035::layer::activate(std::vector<int> inputs){
     std::vector<int> output;
-    std::vector<int> values;
-    if(neurons[0].get_weights().size() != inputs.size()){
-        values.push_back(1);
-        for(int i = 0; i <= inputs.size(); i++){
-            values.push_back(inputs[i]);
-        }
-    }else{
-        values = inputs;
-    }
     for(int i = 0; i < neurons_n; i++){
-        int y = neurons[i].activation_fn(values);
+        int y = neurons[i].activation_fn(inputs);
         output.push_back(y);
     }
     return output;
 }
-void MKHSIN035::layer::learn(int index, std::vector<int> inputs, double t){
-    std::vector<int> values;
-    if(neurons[index].get_weights().size() != inputs.size()){
-                
-        values.push_back(1);
-        for(int i = 0; i <= inputs.size(); i++){
-            values.push_back(inputs[i]);
-        }
-    }else{
-        values = inputs;
-    }
-    std::vector<double> weights = neurons[index].get_weights();
-    int y = neurons[index].activation_fn(values);
-                
+void MKHSIN035::layer::learn(int index, MKHSIN035::data examples){
 
-    //weights[0] = -1.5;
-    while(true){
-        if(y == t)
-            break;
-        
-        for (int i = 0; i < this->prev_neurons; i++){
-            weights[i] += 0.009*(t-y) * values[i];
+    double done = false;
+
+    int c = 0;
+    while(c != 8){
+        done = true;
+        for(auto entry:examples){
+            //if(enr)
+            //done = true;
+            //std::cout<<entry.second<<" "<<entry.first[0]<<" "<<entry.first[1]<<std::endl;
+            std::vector<double> weights = neurons[index].get_weights();
+            std::vector<int> ex = entry.first;
+            int t = entry.second;
+            int y = neurons[index].activation_fn(ex);
+            
+            while(true){
+                if(y == t)
+                    break;
+
+                for (int i = 0; i < this->prev_neurons; i++){
+                    if(i == 0)
+                        weights[i] += 0.009*(t-y);
+                    else
+                        weights[i] += 0.009*(t-y) * ex[i-1];
+                }
+                neurons[index].set_weights(weights);
+                y = neurons[index].activation_fn(ex);
+            }
+            
+            
+
+   
         }
-        neurons[index].set_weights(weights);
-        y = neurons[index].activation_fn(values);
-    }
-    //return true;
+        c++;
+        
+    }   
+    
 }
 std::vector<double> MKHSIN035::layer::get_weights(int i){return neurons[i].get_weights();}
       
