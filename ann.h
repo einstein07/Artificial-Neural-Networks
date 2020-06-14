@@ -14,8 +14,11 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <vector>
+#include <map>
+#include <initializer_list>
 
 namespace MKHSIN035{
+    typedef std::map<std::vector<int>, int >  data; 
     //--------------------------------------------------------------------------
     //Auxillary methods
     //--------------------------------------------------------------------------
