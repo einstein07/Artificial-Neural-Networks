@@ -13,20 +13,41 @@
 //------------------------------------------------------------------------------
 //Default constructor
 MKHSIN035::layer::layer():prev_neurons(0){}
-//Constructor
+//------------------------------------------------------------------------------
+//Constructor used for implementing PART 1:
+//------------------------------------------------------------------------------
 MKHSIN035::layer::layer(int prev_neurons_n, int neurons):prev_neurons(prev_neurons_n+1), neurons_n(neurons){
-    double rand_w[prev_neurons_n+1];
+    double rand_w[prev_neurons];
     srand (time(NULL));
     for (int i = 0; i < neurons_n; i++){ 
         for(int j = 0; j < this->prev_neurons; j++){
             rand_w[j]= ((double) rand() / (RAND_MAX));
-            //std::cout<<"rand: "<<rand_w[j]<<std::endl;
         }
         neuron n(prev_neurons_n+1, rand_w);
         this->neurons.push_back(n);
     }
     
 }
+//------------------------------------------------------------------------------
+//Constructor used to implement PART 2
+//------------------------------------------------------------------------------
+MKHSIN035::layer::layer(int prev_neurons_n, int neurons, const std::vector< std::vector<double> > weights, std::vector<double> bias):prev_neurons(prev_neurons_n+1), neurons_n(neurons){
+    //An array for weights
+    double w [prev_neurons];
+    for (int i = 0; i < neurons_n; i++){ 
+        for(int j = 0; j < this->prev_neurons; j++){
+            //Insert bias weight
+            if(j == 0)
+                w[j]= bias[i];
+            else{
+                w[j] = weights[i][j-1];
+            }
+        }
+        neuron n(prev_neurons, w);
+        this->neurons.push_back(n);
+    }
+}
+
 std::vector<int> MKHSIN035::layer::activate(std::vector<int> inputs){
     std::vector<int> output;
     for(int i = 0; i < neurons_n; i++){
