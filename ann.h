@@ -35,7 +35,9 @@ namespace MKHSIN035{
   public:
       neuron();
       neuron(int prev_neurons, double weights[]);
+      double sum(const std::vector<int> inputs);
       int activation_fn(const std::vector<int> inputs);
+      double sigmoid(double sum);
       std::vector<double> get_weights(); //return weights
       void set_weights(std::vector<double> weights);
   }; 
