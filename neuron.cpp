@@ -17,7 +17,14 @@ MKHSIN035::neuron::neuron(int prev_neurons, double weights[]):prev_neurons(prev_
         this->weights.push_back(weights[i]);
     }
 }
-
+double MKHSIN035::neuron::sum(const std::vector<int> inputs){
+    double sum = 0.0;
+    sum = weights[0];
+    for(int i = 1; i < prev_neurons; i++){
+        sum += weights[i]*inputs[i-1];
+    }
+    return sum;
+}
 int MKHSIN035::neuron::activation_fn(const std::vector<int> inputs){
     double sum = 0.0;
     sum = weights[0];
@@ -27,7 +34,11 @@ int MKHSIN035::neuron::activation_fn(const std::vector<int> inputs){
     this->output = (sum>0?1:0);
     return output;
 }
-      
+
+double MKHSIN035::neuron::sigmoid(double sum){
+    double val = 1(double)/(1+exp(-sum));
+    return val;
+}      
 std::vector<double> MKHSIN035::neuron::get_weights(){return this->weights;}
       
 void MKHSIN035::neuron::set_weights(std::vector<double> weights){
