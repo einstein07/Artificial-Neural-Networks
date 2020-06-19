@@ -25,7 +25,7 @@ double MKHSIN035::neuron::sum(const std::vector<double> inputs){
     }
     return sum;
 }
-int MKHSIN035::neuron::activation_fn(const std::vector<int> inputs){
+int MKHSIN035::neuron::threshold(const std::vector<int> inputs){
     double sum = 0.0;
     sum = weights[0];
     for(int i = 1; i < prev_neurons; i++){
