@@ -16,13 +16,17 @@
 #include <vector>
 #include <map>
 #include <initializer_list>
-
+#include <math.h>
 namespace MKHSIN035{
+    //--------------------------------------------------------------------------
+    //Training data (examples)
+    //--------------------------------------------------------------------------
     typedef std::map<std::vector<int>, int >  data; 
     //--------------------------------------------------------------------------
     //Auxillary methods
     //--------------------------------------------------------------------------
     void part_1();
+    void part_2();
     //--------------------------------------------------------------------------
     //Neuron class interface
     //--------------------------------------------------------------------------
@@ -35,7 +39,7 @@ namespace MKHSIN035{
   public:
       neuron();
       neuron(int prev_neurons, double weights[]);
-      double sum(const std::vector<int> inputs);
+      double sum(const std::vector<double> inputs);
       int activation_fn(const std::vector<int> inputs);
       double sigmoid(double sum);
       std::vector<double> get_weights(); //return weights
@@ -53,8 +57,10 @@ namespace MKHSIN035{
   public:
       layer();
       layer(int prev_neurons_n, int neurons);
+      layer(int prev_neurons_n, int neurons, const std::vector<double> weights, std::vector<double> bias);
       void learn(int i, data examples);//learning fn
-      std::vector<int> activate(std::vector<int> inputs);
+      std::vector<int> threshold_activate(std::vector<int> inputs);
+      std::vector<double> sigmoid_activate(std::vector<double> inputs);
       std::vector<double> get_weights(int i);
       int get_n_neurons();
   };

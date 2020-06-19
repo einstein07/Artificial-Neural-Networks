@@ -31,16 +31,19 @@ MKHSIN035::layer::layer(int prev_neurons_n, int neurons):prev_neurons(prev_neuro
 //------------------------------------------------------------------------------
 //Constructor used to implement PART 2
 //------------------------------------------------------------------------------
-MKHSIN035::layer::layer(int prev_neurons_n, int neurons, const std::vector< std::vector<double> > weights, std::vector<double> bias):prev_neurons(prev_neurons_n+1), neurons_n(neurons){
+MKHSIN035::layer::layer(int prev_neurons_n, int neurons, const std::vector<double> weights, std::vector<double> bias):prev_neurons(prev_neurons_n+1), neurons_n(neurons){
     //An array for weights
     double w [prev_neurons];
+    //This constant indexes the input weights vector
+    int index = 0;
     for (int i = 0; i < neurons_n; i++){ 
         for(int j = 0; j < this->prev_neurons; j++){
             //Insert bias weight
             if(j == 0)
                 w[j]= bias[i];
             else{
-                w[j] = weights[i][j-1];
+                w[j] = weights[index];
+                index += 1;
             }
         }
         neuron n(prev_neurons, w);
@@ -48,10 +51,20 @@ MKHSIN035::layer::layer(int prev_neurons_n, int neurons, const std::vector< std:
     }
 }
 
-std::vector<int> MKHSIN035::layer::activate(std::vector<int> inputs){
+std::vector<int> MKHSIN035::layer::threshold_activate(std::vector<int> inputs){
     std::vector<int> output;
     for(int i = 0; i < neurons_n; i++){
         int y = neurons[i].activation_fn(inputs);
+        output.push_back(y);
+    }
+    return output;
+}
+
+std::vector<double> MKHSIN035::layer::sigmoid_activate(std::vector<double> inputs){
+    std::vector<double> output;
+    for(int i = 0; i < neurons_n; i++){
+        double sum = neurons[i].sum(inputs);//sum  of inputs
+        double y = neurons[i].sigmoid(sum);
         output.push_back(y);
     }
     return output;
