@@ -17,6 +17,8 @@
 #include <map>
 #include <initializer_list>
 #include <math.h>
+#include <cstdlib>
+#include <fstream>
 namespace MKHSIN035{
     //--------------------------------------------------------------------------
     //Training data (examples)
